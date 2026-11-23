@@ -1,0 +1,34 @@
+[project]
+name = "ai-context-hub"
+version = "0.2.0"
+description = "经人工审核的本地 Markdown 共享知识库"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "mcp>=1.20,<2",
+    "PyYAML>=6.0.2,<7",
+]
+
+[project.scripts]
+pkb = "ai_context_hub.cli:main"
+
+[build-system]
+requires = ["hatchling==1.27.0"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["ai_context_hub", "mcp_server", "review"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"rules/startup.md" = "ai_context_hub/startup.md"
+
+[tool.hatch.build.targets.sdist]
+include = ["ai_context_hub", "mcp_server", "review", "rules/startup.md", "tests", "pyproject.toml", "uv.lock", "README.md", "install.sh", "requirements.lock"]
+exclude = ["**/__pycache__", "**/*.pyc"]
+
+[dependency-groups]
+dev = ["pytest>=8,<10"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "--strict-markers"
